@@ -8,14 +8,14 @@ class Figure:
         self.image = image
         self.scanner = scanner.Scanner(self.image)
         self.vertex = self.scanner.vertex
-        self.movement = self.calcMovement(self.vertex)
+        self.angle = self.calcAngle(self.vertex)
 
     def draw(self):
         mat = self.image
         self.scanner.draw(mat)
         cv2.imshow('figure', self.image)
 
-    def calcMovement(self, vertex):
+    def calcAngle(self, vertex):
         vertex = np.vstack([vertex, vertex[-1]])
 
         es = [b - a for b, a in zip(vertex, vertex[1:])]

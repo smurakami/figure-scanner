@@ -24,7 +24,7 @@ class Figure:
         rad = []
         for a, b in zip(es, es[1:]):
             x = np.arctan2(a[1], a[0])
-            b_ = rotate(b, -x)
+            b_ = self.rotate(b, -x)
             rad.append(np.arctan2(b_[1], b_[0]))
         rad = np.array(rad)
         return rad
