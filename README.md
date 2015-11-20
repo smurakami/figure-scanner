@@ -7,9 +7,7 @@
 以下のように、線画を読み込ませます。
 
 ```python
-import cv2
-image = cv2.imread('example.png')
-figure = Figure(image)
+figure = Figure('example.png')
 ```
 
 以下のように、頂点配列にアクセスできます。

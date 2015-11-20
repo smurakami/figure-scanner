@@ -3,8 +3,7 @@ import cv2
 
 class Main:
     def __init__(self):
-        img = cv2.imread('okamura.png')
-        figure = Figure(img)
+        figure = Figure('okamura.png')
         figure.saveJSON('out.json')
         while True:
             figure.draw()

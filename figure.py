@@ -5,7 +5,8 @@ import json
 
 
 class Figure:
-    def __init__(self, image):
+    def __init__(self, filename):
+        image = cv2.imread(filename)
         self.image = image
         self.scanner = scanner.Scanner(self.image)
         self.vertex = self.scanner.vertex
