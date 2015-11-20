@@ -9,6 +9,7 @@ class Scanner:
         image = cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY)
         self.first_idx = self.getFirstIdx(image)
         self.vertex = self.scan(image, self.first_idx)
+        self.counter = 0
 
     def getFirstIdx(self, image):
         th = (int(image.max()) + int(image.min())) / 2
@@ -63,8 +64,12 @@ class Scanner:
     def draw(self, mat):
         mat[:, :, :] = 0
         cv2.circle(mat, self.idx2pos(self.first_idx), 4, (0, 255, 255))
-        for a, b in zip(self.vertex, self.vertex[1:]):
+
+        max_idx = min(len(self.vertex) - 1, self.counter)
+
+        for a, b in zip(self.vertex, self.vertex[1:])[:max_idx]:
             cv2.line(mat, self.idx2pos(a), self.idx2pos(b), [0, 0, 255])
+        self.counter += 1
 
 
 def scan(image):
