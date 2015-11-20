@@ -1,6 +1,7 @@
 import cv2
 import scanner
 import numpy as np
+import json
 
 
 class Figure:
@@ -28,6 +29,15 @@ class Figure:
             rad.append(np.arctan2(b_[1], b_[0]))
         rad = np.array(rad)
         return rad
+
+    def saveJSON(self, filename):
+        dic = {
+                "vertex": self.vertex.tolist(),
+                "angle": self.angle.tolist()
+                }
+        with open(filename, 'w') as f:
+            json.dump(dic, f, sort_keys=True, indent=4)
+
     
     def rotate(self, vec, x):
         mat = np.array([
