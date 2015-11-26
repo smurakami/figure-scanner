@@ -1,5 +1,4 @@
 from figure import Figure
-import cv2
 import commands
 
 class Main:

@@ -4,3 +4,5 @@
 *.pyc
 images
 .DS_Store
+tests
+jsons
