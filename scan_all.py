@@ -12,7 +12,8 @@ def main():
     pngfile_list = commands.getoutput('find images -name "*.png"').split('\n')
 
     for pngfile in pngfile_list:
-        jsonfile = re.sub('^images', 'jsons', pngfile)
+        jsonfile = re.sub('^images', 'jsons',
+                   re.sub('.png$', '.json', pngfile))
         testfile = re.sub('^images', 'tests', pngfile)
         try:
             confirmAndMakeDir(jsonfile)
