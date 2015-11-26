@@ -2,3 +2,5 @@
 .ipynb_checkpoints
 *~
 *.pyc
+images
+.DS_Store
