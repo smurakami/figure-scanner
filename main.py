@@ -1,17 +1,13 @@
 from figure import Figure
 import cv2
+import commands
 
 class Main:
     def __init__(self):
         figure = Figure('okamura.png')
         figure.saveJSON('out.json')
-        while True:
-            figure.draw()
-            key = cv2.waitKey(33)
-            if key == ord('q'):
-                break
-
-
+        figure.saveTestPNG('okamura_test.png')
+        commands.getoutput('open okamura_test.png')
 
 if __name__ == '__main__':
     Main()
