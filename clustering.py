@@ -7,7 +7,7 @@ import glob
 import os
 from scipy.cluster.hierarchy import linkage, dendrogram, leaves_list, fcluster
 from IPython import embed
-import ipdb
+#import ipdb
 
 #取り急ぎjsonsのtwinkleフォルダ直下で回しました
 def main():
@@ -76,6 +76,39 @@ def main():
     plt.show()
 
 
+    #########################################################
+    #クラスタの上位からクラスタ要素数10以下のものを選んでいくどーん！#
+    #########################################################
+    
+    #フラットクラスタリングで切りまくって階層を上からサーチしていきます。
+    angle_sublist = np.array(angle_sublist)
+    #index溜め込み用のセット
+    number_pool = []
+    number_pool = set(number_pool)
+    cluster_vertex = []
+    figure_vertex_list = []
+
+    for x in range(9,0,-1):
+        flat_result = fcluster(result, x*0.1*result[mat_size -2][2], 'distance')
+        #一定の値で階層クラスタリングを切って、各クラスタを探索
+        for y in np.unique(flat_result):
+            #各クラスタの要素数が10以下の場合
+            if len(np.where(flat_result == y)[0]) < 10:
+                #そのクラスタがすでに認識したクラスタの要素でない場合
+                if len(set(np.where(flat_result == y)[0].tolist()) - number_pool) == len(set(np.where(flat_result == y)[0].tolist())):
+                    #追加のindexをsetに保存
+                    figure_vertex_list.append(cluster_vertex)
+                    cluster_vertex = [] 
+                    number_pool = list(number_pool)
+                    number_pool.extend(np.where(flat_result == y)[0].tolist())
+                    number_pool = set(number_pool)
+                    print number_pool
+                    print np.where(flat_result == y)
+                    for l in np.where(flat_result == y)[0]:
+                        ap_V_figure = angle_sublist[l].tolist()
+                        cluster_vertex.append(ap_V_figure)
+
+    """
     #一定距離で区切ってフラットクラスタリング（△*result[mat_size -2][2]の△の値で深さを調整）
     flat_result = fcluster(result,0.7*result[mat_size -2][2], 'distance')
     flat_result_list = flat_result.tolist()
@@ -93,7 +126,6 @@ def main():
 
     # for t in represent_index:
     #     vertex_for_figure.append(angle_sublist[t])
-
-    with open('clusters/twinkle.json', 'w') as f: json.dump(vertex_for_figure,f, sort_keys=True, indent=4)
-
+    """
+    with open('clusters/twinkle.json', 'w') as f: json.dump(figure_vertex_list,f, sort_keys=True, indent=4)
 main()
