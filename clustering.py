@@ -80,8 +80,6 @@ def main():
     flat_result = fcluster(result,0.7*result[mat_size -2][2], 'distance')
     flat_result_list = flat_result.tolist()
 
-    ipdb.set_trace()
-
     angle_sublist = np.array(angle_sublist)
     # 各クラスタの配列を集める
     vertex_for_figure = [angle_sublist[flat_result == l].tolist() for l in np.unique(flat_result)]
