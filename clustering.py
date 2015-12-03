@@ -7,6 +7,7 @@ import glob
 import os
 from scipy.cluster.hierarchy import linkage, dendrogram, leaves_list, fcluster
 from IPython import embed
+import ipdb
 
 #取り急ぎjsonsのtwinkleフォルダ直下で回しました
 def main():
@@ -79,18 +80,22 @@ def main():
     flat_result = fcluster(result,0.7*result[mat_size -2][2], 'distance')
     flat_result_list = flat_result.tolist()
 
-    represent_index = []
+    ipdb.set_trace()
 
-    for s in range(1,max(flat_result_list)+1):
-        represent_index.append(flat_result_list.index(s))
+    angle_sublist = np.array(angle_sublist)
+    # 各クラスタの配列を集める
+    vertex_for_figure = [angle_sublist[flat_result == l].tolist() for l in np.unique(flat_result)]
 
-    vertex_for_figure = []
+    # represent_index = []
 
-    for t in represent_index:
-        vertex_for_figure.append(angle_sublist[t])
+    # for s in range(1,max(flat_result_list)+1):
+    #     represent_index.append(flat_result_list.index(s))
 
-    with open('clusters/twinkle.json', 'w') as f:
-        json.dump(vertex_for_figure,f, sort_keys=True, indent=4)
+    # vertex_for_figure = []
 
+    # for t in represent_index:
+    #     vertex_for_figure.append(angle_sublist[t])
+
+    with open('clusters/twinkle.json', 'w') as f: json.dump(vertex_for_figure,f, sort_keys=True, indent=4)
 
 main()
