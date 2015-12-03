@@ -79,7 +79,6 @@ def main():
     #########################################################
     #クラスタの上位からクラスタ要素数10以下のものを選んでいくどーん！#
     #########################################################
-    
     #フラットクラスタリングで切りまくって階層を上からサーチしていきます。
     angle_sublist = np.array(angle_sublist)
     #index溜め込み用のセット
@@ -108,6 +107,7 @@ def main():
                         ap_V_figure = angle_sublist[l].tolist()
                         cluster_vertex.append(ap_V_figure)
 
+    del figure_vertex_list[0]
     """
     #一定距離で区切ってフラットクラスタリング（△*result[mat_size -2][2]の△の値で深さを調整）
     flat_result = fcluster(result,0.7*result[mat_size -2][2], 'distance')
