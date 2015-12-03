@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 """
 
 
-def drawClusters(filename):
+def drawClustersInFile(filename):
     """
     クラスタリング結果を可視化する
 
@@ -19,37 +19,37 @@ def drawClusters(filename):
         クラスタリング結果が格納されているファイルの名前
     """
     jsondata = json.load(open(filename))
-    for angle_array in jsondata:
-        drawAngleArray(angle_array)
+    for cluster in jsondata:
+        drawCluster(cluster)
 
 
-def drawPointArray(point_array):
+def drawCluster(cluster):
+    """
+    クラスタ中の全ての点列を描画
+    """
+    point_array_cluster = []
+    for angle_array in cluster:
+        point_array_cluster.append(convertAngleToPoint(angle_array))
+    drawPointArrays(point_array_cluster)
+
+
+def drawPointArrays(point_array_list):
     """
     図形の頂点列から図形を描画する
     Parameters
     ----------
-    pos_array : (n, 2) array
+    pos_arrays : array_like, each element is (length, 2) array
     """
-    xs, ys = np.array(point_array).T
     # 画面サイズ
     width = 400
     height = 300
     plt.xlim(width)
     plt.ylim(height)
-    plt.plot(xs + width/2, ys + height/2)
+    for point_array in point_array_list:
+        xs, ys = np.array(point_array).T
+        plt.plot(xs + width/2, ys + height/2)
     plt.show()
 
-
-def drawAngleArray(angle_array):
-    """
-    図形の外角列から図形を描画する
-
-    Parameters
-    ----------
-    angle_array : [Float]
-    """
-    point_array = convertAngleToPoint(angle_array)
-    drawPointArray(point_array)
 
 """
 汎用関数
@@ -97,10 +97,6 @@ def convertAngleToPoint(angle_array):
         point_array.append(pos)
 
     point_array = np.vstack(point_array)
-    # 平均座標
-    mean_pos = point_array.mean(0)
-    # 原点中心に平行移動
-    point_array -= mean_pos
 
     return point_array
 
@@ -110,7 +106,7 @@ MAIN
 
 
 def main():
-    drawClusters("clusters/twinkle.json")
+    drawClustersInFile("clusters/twinkle.json")
 
 
 if __name__ == "__main__":
