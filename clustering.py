@@ -92,7 +92,7 @@ def main():
         #一定の値で階層クラスタリングを切って、各クラスタを探索
         for y in np.unique(flat_result):
             #各クラスタの要素数が10以下の場合
-            if len(np.where(flat_result == y)[0]) < 10:
+            if len(np.where(flat_result == y)[0]) <= 10 and len(np.where(flat_result == y)[0]) >= 5:
                 #そのクラスタがすでに認識したクラスタの要素でない場合
                 if len(set(np.where(flat_result == y)[0].tolist()) - number_pool) == len(set(np.where(flat_result == y)[0].tolist())):
                     #追加のindexをsetに保存
