@@ -54,7 +54,7 @@ class Scanner:
                 next(idx + d)
 
         next(first_idx)
-        
+
         self.bmap_after = bmap.copy()
         return self.vertex
 
