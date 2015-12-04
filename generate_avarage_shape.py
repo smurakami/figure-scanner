@@ -3,14 +3,13 @@ import json
 import numpy as np
 import ipdb
 import matplotlib.pyplot as plt
-import sys
 
 """
 描画関数
 """
 
 
-def drawClustersInFile(filename):
+def genearteAvarageShapeWithFile(filename):
     """
     クラスタリング結果を可視化する
 
@@ -107,11 +106,7 @@ MAIN
 
 
 def main():
-    if len(sys.argv) >= 2:
-        filename = sys.argv[1]
-    else:
-        filename = "clusters/twinkle.json"
-    drawClustersInFile(filename)
+    genearteAvarageShapeWithFile("clusters/twinkle.json")
 
 
 if __name__ == "__main__":

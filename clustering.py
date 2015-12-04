@@ -14,12 +14,12 @@ import sys
 #取り急ぎjsonsのtwinkleフォルダ直下で回しました
 def main():
     shape_list = [
-        'clutter',
         'gochagocha',
         'kirakira',
         'murmur',
         'sarasara',
         'twinkle',
+        'clutter',
     ]
     for shape in shape_list:
         clusterShape(shape)
@@ -94,8 +94,8 @@ def clusterShape(shape):
     #クラスタリング実行
     result = linkage(dis_mat, method='average')
 
-    dendrogram(result, p=20, truncate_mode='lastp')
-    plt.show()
+    # dendrogram(result, p=20, truncate_mode='lastp')
+    # plt.show()
 
     #########################################################
     #クラスタの上位からクラスタ要素数10以下のものを選んでいくどーん！#
