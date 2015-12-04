@@ -7,12 +7,28 @@ import glob
 import os
 from scipy.cluster.hierarchy import linkage, dendrogram, leaves_list, fcluster
 from IPython import embed
+import sys
 #import ipdb
+
 
 #取り急ぎjsonsのtwinkleフォルダ直下で回しました
 def main():
-    #jsonファイルのファイル名取得
-    dirname = 'jsons/twinkle/JPN'
+    shape_list = [
+        'clutter',
+        'gochagocha',
+        'kirakira',
+        'murmur',
+        'sarasara',
+        'twinkle',
+    ]
+    for shape in shape_list:
+        clusterShape(shape)
+
+
+def clusterShape(shape):
+    print 'shape:', shape
+
+    dirname = 'jsons/%s/*' % shape
     file_list = glob.glob(os.path.join(dirname, '*.json'))
 
     ################
@@ -30,13 +46,12 @@ def main():
         angle_for_append = data2["angle"]
         angle.extend(angle_for_append)
 
-
-    print "全体の長さ（データの点の数）"
+    print "全体の長さ（データの点の数）",
     print len(angle)
 
     #角度のリストを分割↓のzipのところの数字が○個ずつで分割することを決めています。
     angle_sublist = zip(*[iter(angle)]*50)
-    print "サブリストの数"
+    print "サブリストの数",
     print len(angle_sublist)
 
     mat_size = len(angle_sublist)
@@ -46,7 +61,7 @@ def main():
     #####################
 
     #分割でできた角度の推移データの数だけ、ゼロ行列を作っておきます
-    dis_mat = np.zeros((mat_size,mat_size))
+    dis_mat = np.zeros((mat_size, mat_size))
 
     #距離ベクトルの獲得DTW計算
     def dtw(vec1, vec2):
@@ -61,20 +76,26 @@ def main():
         return d[-1][-1]
 
     #距離行列作成
-    for x in range(0,mat_size):
-        for y in range(0,mat_size):
-            dis_mat[x,y] = dtw(angle_sublist[x],angle_sublist[y])
+    print 'mat_size:', mat_size
+    for x in range(mat_size):
+        print x,
+        sys.stdout.flush()
+        for y in range(0, x + 1):
+            dist = dtw(angle_sublist[x], angle_sublist[y])
+            dis_mat[x, y] = dist
+            dis_mat[y, x] = dist
+
+
 
     #距離行列見てみます、対角成分は0です。
-    print "距離行列"
+    print "距離行列",
     print dis_mat
 
     #クラスタリング実行
-    result = linkage(dis_mat, method = 'average')
+    result = linkage(dis_mat, method='average')
 
-    dendrogram(result, p = 20, truncate_mode='lastp')
+    dendrogram(result, p=20, truncate_mode='lastp')
     plt.show()
-
 
     #########################################################
     #クラスタの上位からクラスタ要素数10以下のものを選んでいくどーん！#
@@ -89,8 +110,9 @@ def main():
     #最終出力する３次元配列のリスト
     figure_vertex_list = []
 
-    for x in range(9,0,-1):
-        flat_result = fcluster(result, x*0.1*result[mat_size -2][2], 'distance')
+    for x in range(9, 0, -1):
+        flat_result = fcluster(
+            result, x * 0.1 * result[mat_size - 2][2], 'distance')
         #一定の値で階層クラスタリングを切って、各クラスタを探索
         for y in np.unique(flat_result):
             #各クラスタの要素数が10以下の場合
@@ -100,7 +122,7 @@ def main():
                     #全体のリスト（figure_vertex_list）に、クラスタのリスト(cluster_vertex)を追加
                     figure_vertex_list.append(cluster_vertex)
                     #クラスタのリストの要素を空に
-                    cluster_vertex = [] 
+                    cluster_vertex = []
                     #追加のindexをsetに保存
                     number_pool = list(number_pool)
                     number_pool.extend(np.where(flat_result == y)[0].tolist())
@@ -113,7 +135,7 @@ def main():
                         cluster_vertex.append(ap_V_figure)
 
     del figure_vertex_list[0]
-    
+
     """
     #一定距離で区切ってフラットクラスタリング（△*result[mat_size -2][2]の△の値で深さを調整）
     flat_result = fcluster(result,0.7*result[mat_size -2][2], 'distance')
@@ -133,5 +155,7 @@ def main():
     # for t in represent_index:
     #     vertex_for_figure.append(angle_sublist[t])
     """
-    with open('clusters/twinkle.json', 'w') as f: json.dump(figure_vertex_list,f, sort_keys=True, indent=4)
+    with open('clusters/%s.json' % shape, 'w') as f:
+        json.dump(figure_vertex_list, f, sort_keys=True, indent=4)
+
 main()
