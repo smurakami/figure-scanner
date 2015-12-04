@@ -84,7 +84,9 @@ def main():
     #index溜め込み用のセット
     number_pool = []
     number_pool = set(number_pool)
+    #クラスタのリスト
     cluster_vertex = []
+    #最終出力する３次元配列のリスト
     figure_vertex_list = []
 
     for x in range(9,0,-1):
@@ -95,19 +97,23 @@ def main():
             if len(np.where(flat_result == y)[0]) <= 10 and len(np.where(flat_result == y)[0]) >= 5:
                 #そのクラスタがすでに認識したクラスタの要素でない場合
                 if len(set(np.where(flat_result == y)[0].tolist()) - number_pool) == len(set(np.where(flat_result == y)[0].tolist())):
-                    #追加のindexをsetに保存
+                    #全体のリスト（figure_vertex_list）に、クラスタのリスト(cluster_vertex)を追加
                     figure_vertex_list.append(cluster_vertex)
+                    #クラスタのリストの要素を空に
                     cluster_vertex = [] 
+                    #追加のindexをsetに保存
                     number_pool = list(number_pool)
                     number_pool.extend(np.where(flat_result == y)[0].tolist())
                     number_pool = set(number_pool)
                     print number_pool
                     print np.where(flat_result == y)
+                    #クラスタ内の要素の角度のリストを作ります、それがcluster_vertex
                     for l in np.where(flat_result == y)[0]:
                         ap_V_figure = angle_sublist[l].tolist()
                         cluster_vertex.append(ap_V_figure)
 
     del figure_vertex_list[0]
+    
     """
     #一定距離で区切ってフラットクラスタリング（△*result[mat_size -2][2]の△の値で深さを調整）
     flat_result = fcluster(result,0.7*result[mat_size -2][2], 'distance')
