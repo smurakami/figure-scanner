@@ -3,6 +3,7 @@ import json
 import numpy as np
 import glob
 import matplotlib.pyplot as plt
+import matplotlib
 import os
 
 
@@ -21,10 +22,13 @@ def generateAvarageShapeWithFile(filename):
         クラスタリング結果が格納されているファイルの名前
     """
     clusters = json.load(open(filename))
-    point_arrays = generateAvarageShape(clusters)
+    point_array_list = [getPointArrayFromCluster(cluster)
+                        for cluster in clusters]
     basename = os.path.basename(filename)
     root, ext = os.path.splitext(basename)
-    drawPointArrayList(point_arrays, "avarage_images/%s.png" % root)
+    for i, point_array in enumerate(point_array_list):
+        drawPointArray(point_array,
+                       "avarage_images/%s_%02d.png" % (root, i))
 
 
 def generateAvarageShape(clusters):
@@ -137,7 +141,7 @@ def invert(point_array, axis='vertilal'):
     return point_array
 
 
-def drawPointArray(point_array):
+def drawPointArray(point_array, filename):
     """
     図形の頂点列から図形を描画する
     Parameters
@@ -145,13 +149,21 @@ def drawPointArray(point_array):
     pos_arrays : array_like, each element is (length, 2) array
     """
     # 画面サイズ
-    width = 400
-    height = 300
+    print point_array[0]
+    # height, width = point_array.max(0) - point_array.min(0) + margin * 2
+    plt.figure(figsize=matplotlib.figure.figaspect(1))
+    margin = 50
+    height, width = point_array.max(0) - point_array.min(0)
+    height = width = max(height, width) + margin * 2
+    y_origin, x_origin = point_array.min(0)
     plt.xlim(width)
     plt.ylim(height)
-    xs, ys = np.array(point_array).T
-    plt.plot(xs + width/2, ys + height/2)
-    plt.show()
+    # import ipdb
+    # ipdb.set_trace()
+    ys, xs = np.array(point_array).T
+    plt.plot(xs - x_origin + margin, ys - y_origin + margin)
+    plt.savefig(filename)
+    plt.clf()
 
 
 def drawPointArrayList(point_array_list, filename):
