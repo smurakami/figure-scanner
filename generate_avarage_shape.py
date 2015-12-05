@@ -1,29 +1,52 @@
 #coding: utf-8
 import json
 import numpy as np
-import ipdb
+import glob
 import matplotlib.pyplot as plt
+import os
+
 
 """
 描画関数
 """
 
 
-def genearteAvarageShapeWithFile(filename):
+def generateAvarageShapeWithFile(filename):
     """
-    クラスタリング結果を可視化する
+    クラスタリング結果から平均図形作成
 
     Parameters
     ----------
     filename : string
         クラスタリング結果が格納されているファイルの名前
     """
-    jsondata = json.load(open(filename))
+    clusters = json.load(open(filename))
+    point_arrays = generateAvarageShape(clusters)
+    basename = os.path.basename(filename)
+    root, ext = os.path.splitext(basename)
+    drawPointArrayList(point_arrays, "avarage_images/%s.png" % root)
+
+
+def generateAvarageShape(clusters):
+    """
+    クラスタリング結果から平均図形作成
+
+    Parameters
+    ----------
+    clusters : array_like
+        クラスタリング結果
+    """
+    component_num = 8
     point_array_list = []
-    for cluster in jsondata[:6]:
+    for cluster in clusters[:component_num]:
         point_array_list.append(getPointArrayFromCluster(cluster))
-    point_arrays = joinPointArrays(point_array_list)
-    drawPointArrayList(point_arrays)
+
+    point_array_list = point_array_list[:3]
+
+    if len(point_array_list) < component_num:
+        point_array_list = [point_array_list[i % len(point_array_list)]
+                            for i in range(component_num)]
+    return joinPointArrays(point_array_list)
 
 
 def getPointArrayFromCluster(cluster):
@@ -32,36 +55,24 @@ def getPointArrayFromCluster(cluster):
 
 
 def joinPointArrays(point_array_list):
-    # point_array_list = np.array(point_array_list)
-    expected_total_angle_list = [
-        np.pi * (0 + 0.25),
-        np.pi * (0.5 + 0.25),
-        np.pi * (1 + 0.25),
-        np.pi * (1.5 + 0.25),
-    ]
+    component_num = len(point_array_list)
+    expected_total_angle_list = \
+        [np.pi * (i * 2 / float(component_num)) for i in range(component_num)]
 
     retval = []
     pos = np.array([0, 0])
-    for point_array, expected_total_angle in zip(point_array_list, expected_total_angle_list):
-        size = 100.0
+    for point_array, expected_total_angle in zip(point_array_list,
+                                                 expected_total_angle_list):
+        size = 50.0
         if getToInvert(point_array):
             point_array = invert(point_array)
         total_angle = getTotalAngle(point_array)
         total_move_len = getTotalMoveLen(point_array)
         point_array = rotate(point_array, expected_total_angle - total_angle)
         point_array = scale(point_array, size / total_move_len)
-        print getTotalAngle(point_array)
-        print point_array[0]
         retval.append(point_array + pos)
         pos = pos + point_array[-1]
 
-    # point_array_list = point_array_list / total_move_list[:, None] * 100
-
-    # new_list = []
-    # pos = np.array([0, 0])
-    # for point_array in point_array_list:
-    #     new_list.append(point_array + pos)
-    #     pos = point_array[-1] + pos
     return retval
 
 
@@ -143,7 +154,7 @@ def drawPointArray(point_array):
     plt.show()
 
 
-def drawPointArrayList(point_array_list):
+def drawPointArrayList(point_array_list, filename):
     """
     図形の頂点列から図形を描画する
     Parameters
@@ -151,14 +162,19 @@ def drawPointArrayList(point_array_list):
     pos_arrays : array_like, each element is (length, 2) array
     """
     # 画面サイズ
-    width = 400
-    height = 300
+    total_array = np.vstack(point_array_list)
+    margin = np.array([50, 50])
+    height, width = total_array.max(0) - total_array.min(0) + margin * 2
+    y_origin, x_origin = total_array.min(0)
+    # import ipdb
+    # ipdb.set_trace()
     plt.xlim(width)
     plt.ylim(height)
     for point_array in point_array_list:
-        xs, ys = np.array(point_array).T
-        plt.plot(xs + width/2, ys + height/2)
-    plt.show()
+        ys, xs = np.array(point_array).T
+        plt.plot(xs - x_origin + margin[1], ys - y_origin + margin[0])
+    plt.savefig(filename)
+    plt.clf()
 
 
 """
@@ -216,7 +232,8 @@ MAIN
 
 
 def main():
-    genearteAvarageShapeWithFile("clusters/twinkle.json")
+    for json_file in glob.glob("clusters/*.json"):
+        generateAvarageShapeWithFile(json_file)
 
 
 if __name__ == "__main__":

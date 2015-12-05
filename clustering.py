@@ -14,12 +14,9 @@ import sys
 #取り急ぎjsonsのtwinkleフォルダ直下で回しました
 def main():
     shape_list = [
-        'gochagocha',
-        'kirakira',
-        'murmur',
-        'sarasara',
-        'twinkle',
-        'clutter',
+        ['clutter', 'gochagocha']
+        ['murmur', 'sarasara']
+        ['twinkle', 'kirakira']
     ]
     for shape in shape_list:
         clusterShape(shape)
@@ -28,8 +25,15 @@ def main():
 def clusterShape(shape):
     print 'shape:', shape
 
-    dirname = 'jsons/%s/*' % shape
-    file_list = glob.glob(os.path.join(dirname, '*.json'))
+    shape_en, shape_jp = shape
+    dirname_en = 'jsons/%s/*' % shape_en
+    file_list_en = glob.glob(os.path.join(dirname_en, '*.json'))
+
+    shape_jp, shape_jp = shape
+    dirname_jp = 'jsons/%s/*' % shape_jp
+    file_list_jp = glob.glob(os.path.join(dirname_jp, '*.json'))
+
+    file_list = file_list_en + file_list_jp
 
     ################
     #データリスト作り#️
