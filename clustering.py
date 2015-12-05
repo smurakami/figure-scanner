@@ -14,9 +14,9 @@ import sys
 #取り急ぎjsonsのtwinkleフォルダ直下で回しました
 def main():
     shape_list = [
-        ['clutter', 'gochagocha']
-        ['murmur', 'sarasara']
-        ['twinkle', 'kirakira']
+        ['clutter', 'gochagocha'],
+        ['murmur', 'sarasara'],
+        ['twinkle', 'kirakira'],
     ]
     for shape in shape_list:
         clusterShape(shape)
@@ -159,7 +159,7 @@ def clusterShape(shape):
     # for t in represent_index:
     #     vertex_for_figure.append(angle_sublist[t])
     """
-    with open('clusters/%s.json' % shape, 'w') as f:
+    with open('clusters/%s_%s.json' % (shape_en, shape_jp), 'w') as f:
         json.dump(figure_vertex_list, f, sort_keys=True, indent=4)
 
 main()
