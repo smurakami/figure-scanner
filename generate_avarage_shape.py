@@ -19,21 +19,131 @@ def genearteAvarageShapeWithFile(filename):
         クラスタリング結果が格納されているファイルの名前
     """
     jsondata = json.load(open(filename))
-    for cluster in jsondata:
-        drawCluster(cluster)
+    point_array_list = []
+    for cluster in jsondata[:6]:
+        point_array_list.append(getPointArrayFromCluster(cluster))
+    point_arrays = joinPointArrays(point_array_list)
+    drawPointArrayList(point_arrays)
 
 
-def drawCluster(cluster):
+def getPointArrayFromCluster(cluster):
+    angle_array = cluster[0]
+    return convertAngleToPoint(angle_array)
+
+
+def joinPointArrays(point_array_list):
+    # point_array_list = np.array(point_array_list)
+    expected_total_angle_list = [
+        np.pi * (0 + 0.25),
+        np.pi * (0.5 + 0.25),
+        np.pi * (1 + 0.25),
+        np.pi * (1.5 + 0.25),
+    ]
+
+    retval = []
+    pos = np.array([0, 0])
+    for point_array, expected_total_angle in zip(point_array_list, expected_total_angle_list):
+        size = 100.0
+        if getToInvert(point_array):
+            point_array = invert(point_array)
+        total_angle = getTotalAngle(point_array)
+        total_move_len = getTotalMoveLen(point_array)
+        point_array = rotate(point_array, expected_total_angle - total_angle)
+        point_array = scale(point_array, size / total_move_len)
+        print getTotalAngle(point_array)
+        print point_array[0]
+        retval.append(point_array + pos)
+        pos = pos + point_array[-1]
+
+    # point_array_list = point_array_list / total_move_list[:, None] * 100
+
+    # new_list = []
+    # pos = np.array([0, 0])
+    # for point_array in point_array_list:
+    #     new_list.append(point_array + pos)
+    #     pos = point_array[-1] + pos
+    return retval
+
+
+def rotate(point_array, rad):
+    '''
+    図形を回転する
+    '''
+    mat = np.array([
+        [np.cos(rad), np.sin(rad)],
+        [-np.sin(rad), np.cos(rad)]])
+
+    return point_array.dot(mat)
+
+
+def scale(point_array, val):
+    '''
+    図形を拡大する．
+    '''
+    return point_array * val
+
+
+def getTotalMove(point_array):
+    '''
+    始点と最終点の座標の差
+    '''
+    return point_array[-1] - point_array[0]
+
+
+def getTotalMoveLen(point_array):
+    '''
+    始点と最終点の距離
+    '''
+    move = getTotalMove(point_array)
+    return np.sqrt((move ** 2).sum(-1))
+
+
+def getTotalAngle(point_array):
+    '''
+    最初の辺と最後の辺のなす角
+    '''
+    total_move = getTotalMove(point_array)
+    return np.arctan2(total_move[1], total_move[0])
+
+
+def getToInvert(point_array):
     """
-    クラスタ中の全ての点列を描画
+    図形を反転するべきかどうか判定する
     """
-    point_array_cluster = []
-    for angle_array in cluster:
-        point_array_cluster.append(convertAngleToPoint(angle_array))
-    drawPointArrays(point_array_cluster)
+    angle = getTotalAngle(point_array)
+    point_array = rotate(point_array, -angle)
+    x, y = point_array.mean(0)
+    return y > 0
 
 
-def drawPointArrays(point_array_list):
+def invert(point_array, axis='vertilal'):
+    """
+    図形を鏡像判定する
+    """
+    angle = getTotalAngle(point_array)
+    point_array = rotate(point_array, -angle)
+    point_array[:, 1] = -point_array[:, -1]
+    return point_array
+
+
+def drawPointArray(point_array):
+    """
+    図形の頂点列から図形を描画する
+    Parameters
+    ----------
+    pos_arrays : array_like, each element is (length, 2) array
+    """
+    # 画面サイズ
+    width = 400
+    height = 300
+    plt.xlim(width)
+    plt.ylim(height)
+    xs, ys = np.array(point_array).T
+    plt.plot(xs + width/2, ys + height/2)
+    plt.show()
+
+
+def drawPointArrayList(point_array_list):
     """
     図形の頂点列から図形を描画する
     Parameters
