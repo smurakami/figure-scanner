@@ -41,7 +41,7 @@ def generateAvarageShape(clusters):
     for cluster in clusters[:component_num]:
         point_array_list.append(getPointArrayFromCluster(cluster))
 
-    point_array_list = point_array_list[:3]
+    point_array_list = point_array_list[:component_num]
 
     if len(point_array_list) < component_num:
         point_array_list = [point_array_list[i % len(point_array_list)]
