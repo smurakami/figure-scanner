@@ -50,28 +50,32 @@ def cul_Kakudo(shape):
     print point_num
 
     #角の数
-    def kado_num(x): 
+    def kado_fil(x): 
         #直角　= π/2ラジアン = 3.14/2 = 1.57
         return math.fabs(x) >= 1.57
 
+    kado_num = len(filter(kado_fil,angle)) 
+
     print "角の数" ,
-    print len(filter(kado_num,angle)) 
+    print kado_num
 
     #丸さ
-    def maru_num(x): 
+    def maru_fil(x): 
         return math.fabs(x) < 1.57 and math.fabs(x) > 0.1745
 
+    maru_rate = float(len(filter(maru_fil,angle))) / float(point_num)
     print "丸率",
-    print float(len(filter(maru_num,angle))) / float(point_num)
+    print maru_rate
 
 
     #真っ直ぐさ
-    def massugu_num(x):
+    def massugu_fil(x):
         #直線 = 10度以内とする　= 0.1745
         return math.fabs(x) <= 0.1745
 
+    massugu_rate = float(len(filter(massugu_fil,angle))) / float(point_num)
     print "真っ直ぐ率",
-    print float(len(filter(massugu_num,angle))) / float(point_num)
+    print massugu_rate
 
     plt.plot(angle)
     plt.show()
