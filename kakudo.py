@@ -18,10 +18,10 @@ def main():
         ['clutter', 'gochagocha']
     ]
     for shape in shape_list:
-        cul_Kakudo(shape)
+        cal_Kakudo(shape)
 
 
-def cul_Kakudo(shape):
+def cal_Kakudo(shape):
     print 'shape:', shape
 
     shape_en, shape_jp = shape
