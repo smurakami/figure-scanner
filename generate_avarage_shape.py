@@ -158,8 +158,6 @@ def drawPointArray(point_array, filename):
     y_origin, x_origin = point_array.min(0)
     plt.xlim(width)
     plt.ylim(height)
-    # import ipdb
-    # ipdb.set_trace()
     ys, xs = np.array(point_array).T
     plt.plot(xs - x_origin + margin, ys - y_origin + margin)
     plt.savefig(filename)
