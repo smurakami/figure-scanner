@@ -22,14 +22,14 @@ def main():
     for_save_list = []
 
     for shape in shape_list:
-        features = cal_Kakudo(shape)
+        features = cal_Features(shape)
         for_save_list.append(features)
 
     with open('figure_features.json','w')as f:
         json.dump(for_save_list, f, sort_keys=True, indent=4)
 
 
-def cal_Kakudo(shape):
+def cal_Features(shape):
     print 'shape:', shape
 
     shape_en, shape_jp = shape
