@@ -15,10 +15,19 @@ import math
 #取り急ぎjsonsのtwinkleフォルダ直下で回しました
 def main():
     shape_list = [
-        ['clutter', 'gochagocha']
+        ['clutter', 'gochagocha'],
+        ['murmur', 'sarasara'],
+        ['twinkle', 'kirakira'],
     ]
+
+    for_save_list = []
+
     for shape in shape_list:
-        cal_Kakudo(shape)
+        features = cal_Kakudo(shape)
+        for_save_list.append(features)
+
+    with open('figure_features.json','w')as f:
+        json.dump(for_save_list, f, sort_keys=True, indent=4)
 
 
 def cal_Kakudo(shape):
@@ -39,46 +48,45 @@ def cal_Kakudo(shape):
     ################
     shape_num = len(file_list)
 
-    #とりあえずhatayamaさんので試してみましょう。
-    f = open(file_list[4])
-    data = json.load(f)
-    angle = data["angle"]
-
-    point_num = len(angle)
-
-    print "頂点数",
-    print point_num
+    # features_list = [角の数,丸率、直線率]
+    features_list = []
 
     #角の数
     def kado_fil(x): 
         #直角　= π/2ラジアン = 3.14/2 = 1.57
         return math.fabs(x) >= 1.57
-
-    kado_num = len(filter(kado_fil,angle)) 
-
-    print "角の数" ,
-    print kado_num
-
-    #丸さ
+    
+    #丸率
     def maru_fil(x): 
         return math.fabs(x) < 1.57 and math.fabs(x) > 0.1745
-
-    maru_rate = float(len(filter(maru_fil,angle))) / float(point_num)
-    print "丸率",
-    print maru_rate
-
 
     #真っ直ぐさ
     def massugu_fil(x):
         #直線 = 10度以内とする　= 0.1745
         return math.fabs(x) <= 0.1745
 
-    massugu_rate = float(len(filter(massugu_fil,angle))) / float(point_num)
-    print "真っ直ぐ率",
-    print massugu_rate
 
-    plt.plot(angle)
-    plt.show()
+    for bangou in range(shape_num):
+        f = open(file_list[bangou])
+        data = json.load(f)
+        angle = data["angle"]
+
+        #頂点数
+        point_num = len(angle)
+
+        #角数
+        kado_num = len(filter(kado_fil,angle)) 
+        #丸率
+        maru_rate = float(len(filter(maru_fil,angle))) / float(point_num)
+        #直線率
+        massugu_rate = float(len(filter(massugu_fil,angle))) / float(point_num)
+
+        #データ格納
+        
+        features_list_for_append = [kado_num, maru_rate, massugu_rate]
+        features_list.append(features_list_for_append)
+
+    return features_list 
 
 
 main()
