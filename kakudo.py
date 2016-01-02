@@ -11,7 +11,7 @@ import sys
 import math
 #import ipdb
 
-#fegure_features.json = [形][ファイルの順番][角の数,丸率、直線率] の形で格納してます
+#fegure_features.json = [形][ファイルの順番][正角の率,負角の率、外側への丸率、内側への丸率、直線率] の形で格納してます
 def main():
     shape_list = [
         ['clutter', 'gochagocha'],
