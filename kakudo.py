@@ -11,8 +11,7 @@ import sys
 import math
 #import ipdb
 
-
-#取り急ぎjsonsのtwinkleフォルダ直下で回しました
+#fegure_features.json = [形][ファイルの順番][角の数,丸率、直線率] の形で格納してます
 def main():
     shape_list = [
         ['clutter', 'gochagocha'],
@@ -66,8 +65,8 @@ def cal_Kakudo(shape):
         return math.fabs(x) <= 0.1745
 
 
-    for bangou in range(shape_num):
-        f = open(file_list[bangou])
+    for i in range(shape_num):
+        f = open(file_list[i])
         data = json.load(f)
         angle = data["angle"]
 
