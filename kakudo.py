@@ -50,14 +50,23 @@ def cal_Features(shape):
     # features_list = [角の数,丸率、直線率]
     features_list = []
 
-    #角の数
+    #正角の数
     def kado_fil(x): 
         #直角　= π/2ラジアン = 3.14/2 = 1.57
-        return math.fabs(x) >= 1.57
+        return x >= 1.57
+
+
+    #負角の数
+    def n_kado_fil(x):
+        return x <= -1.57
     
-    #丸率
+    #外側への丸率
     def maru_fil(x): 
-        return math.fabs(x) < 1.57 and math.fabs(x) > 0.1745
+        return x < 1.57 and x > 0.1745
+
+    #内側への丸率
+    def n_maru_fil(x): 
+        return x > -1.57 and x < -0.1745
 
     #真っ直ぐさ
     def massugu_fil(x):
@@ -73,16 +82,24 @@ def cal_Features(shape):
         #頂点数
         point_num = len(angle)
 
-        #角数
-        kado_num = len(filter(kado_fil,angle)) 
-        #丸率
+        #正角率
+        kado_rate = float(len(filter(kado_fil,angle))) / float(point_num)
+        
+        #負角率
+        n_kado_rate = float(len(filter(n_kado_fil,angle))) / float(point_num)
+
+        #外丸率
         maru_rate = float(len(filter(maru_fil,angle))) / float(point_num)
+
+        #内丸率
+        n_maru_rate = float(len(filter(n_maru_fil,angle))) / float(point_num)
+
         #直線率
         massugu_rate = float(len(filter(massugu_fil,angle))) / float(point_num)
 
         #データ格納
         
-        features_list_for_append = [kado_num, maru_rate, massugu_rate]
+        features_list_for_append = [kado_rate, n_kado_rate, maru_rate,n_maru_rate, massugu_rate]
         features_list.append(features_list_for_append)
 
     return features_list 
