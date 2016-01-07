@@ -50,28 +50,14 @@ def cal_Features(shape):
     # features_list = [角の数,丸率、直線率]
     features_list = []
 
-    #正角の数
-    def kado_fil(x): 
-        #直角　= π/2ラジアン = 3.14/2 = 1.57
-        return x >= 1.57
+    #正の角
+    def p_kado(x, y):
+        return x >=  3.14 * ( (y - 20) / 180) and x <=  3.14 * ( y / 180)
 
+    #負の角
+    def n_kado(x, y):
+        return x <=  -3.14 * ( (y - 20) / 180) and x >=  -3.14 * ( y / 180)
 
-    #負角の数
-    def n_kado_fil(x):
-        return x <= -1.57
-    
-    #外側への丸率
-    def maru_fil(x): 
-        return x < 1.57 and x > 0.1745
-
-    #内側への丸率
-    def n_maru_fil(x): 
-        return x > -1.57 and x < -0.1745
-
-    #真っ直ぐさ
-    def massugu_fil(x):
-        #直線 = 10度以内とする　= 0.1745
-        return math.fabs(x) <= 0.1745
 
 
     for i in range(shape_num):
@@ -82,24 +68,70 @@ def cal_Features(shape):
         #頂点数
         point_num = len(angle)
 
-        #正角率
-        kado_rate = float(len(filter(kado_fil,angle))) / float(point_num)
+        ###正角のゾーン!!###
+        #20度
+        p_kado_20 = float(len(filter(lambda x: x >=  3.14 * ( float(20 - 20) / 180) and x <=  3.14 * ( float(20) / 180) ,angle))) / float(point_num)
         
-        #負角率
-        n_kado_rate = float(len(filter(n_kado_fil,angle))) / float(point_num)
+        #40度
+        p_kado_40 = float(len(filter(lambda x: x >=  3.14 * ( float(40 - 20) / 180) and x <=  3.14 * ( float(40) / 180) ,angle))) / float(point_num)
 
-        #外丸率
-        maru_rate = float(len(filter(maru_fil,angle))) / float(point_num)
+        #60度
+        p_kado_60 = float(len(filter(lambda x: x >=  3.14 * ( float(60 - 20) / 180) and x <=  3.14 * ( float(60) / 180) ,angle))) / float(point_num)
+        
+        #80度
+        p_kado_80 = float(len(filter(lambda x: x >=  3.14 * ( float(80 - 20) / 180) and x <=  3.14 * ( float(80) / 180) ,angle))) / float(point_num)
 
-        #内丸率
-        n_maru_rate = float(len(filter(n_maru_fil,angle))) / float(point_num)
+        #100度
+        p_kado_100 = float(len(filter(lambda x: x >=  3.14 * (float (100 - 20) / 180) and x <=  3.14 * ( float(100) / 180) ,angle))) / float(point_num)
+        
+        #120度
+        p_kado_120 = float(len(filter(lambda x: x >=  3.14 * ( float(120 - 20) / 180) and x <=  3.14 * ( float(120) / 180) ,angle))) / float(point_num)
 
-        #直線率
-        massugu_rate = float(len(filter(massugu_fil,angle))) / float(point_num)
+        #140度
+        p_kado_140 = float(len(filter(lambda x: x >=  3.14 * ( float(140 - 20) / 180) and x <=  3.14 * ( float(140) / 180) ,angle))) / float(point_num)
+        
+        #160度
+        p_kado_160 = float(len(filter(lambda x: x >=  3.14 * ( float(160 - 20) / 180) and x <=  3.14 * ( float(160) / 180) ,angle))) / float(point_num)
+
+        #180度
+        p_kado_180= float(len(filter(lambda x: x >=  3.14 * ( float(180 - 20) / 180) and x <=  3.14 * ( float(180) / 180) ,angle))) / float(point_num)
+        
+
+        ###負角のゾーン!!###
+        #20度
+        n_kado_20 = float(len(filter(lambda x: x <=  -3.14 * ( float(20 - 20) / 180) and x >=  -3.14 * ( float(20) / 180) ,angle))) / float(point_num)
+        
+        #40度
+        n_kado_40 = float(len(filter(lambda x: x <=  -3.14 * ( float(40 - 20) / 180) and x >=  -3.14 * ( float(40) / 180) ,angle))) / float(point_num)
+
+        #60度
+        n_kado_60 = float(len(filter(lambda x: x <=  -3.14 * ( float(60 - 20) / 180) and x >=  -3.14 * ( float(60) / 180) ,angle))) / float(point_num)
+        
+        #80度
+        n_kado_80 = float(len(filter(lambda x: x <=  -3.14 * ( float(80 - 20) / 180) and x >=  -3.14 * ( float(80) / 180) ,angle))) / float(point_num)
+
+        #100度
+        n_kado_100 = float(len(filter(lambda x: x <=  -3.14 * ( float(100 - 20) / 180) and x >=  -3.14 * ( float(100) / 180) ,angle))) / float(point_num)
+        
+        #120度
+        n_kado_120 = float(len(filter(lambda x: x <=  -3.14 * (float (120 - 20) / 180) and x >=  -3.14 * ( float(120) / 180) ,angle))) / float(point_num)
+
+        #140度
+        n_kado_140 = float(len(filter(lambda x: x <=  -3.14 * ( float(140 - 20) / 180) and x >=  -3.14 * ( float(140) / 180) ,angle))) / float(point_num)
+        
+        #160度
+        n_kado_160 = float(len(filter(lambda x: x <=  -3.14 * ( float(160 - 20) / 180) and x >=  -3.14 * ( float(160) / 180) ,angle))) / float(point_num)
+
+        #180度
+        n_kado_180= float(len(filter(lambda x: x <=  -3.14 * ( float(180 - 20) / 180) and x >=  -3.14 * ( float(180) / 180) ,angle))) / float(point_num)
+        
+
+
 
         #データ格納
         
-        features_list_for_append = [kado_rate, n_kado_rate, maru_rate,n_maru_rate, massugu_rate]
+        features_list_for_append = [p_kado_20, p_kado_40, p_kado_60, p_kado_80, p_kado_100, p_kado_120, p_kado_140 , p_kado_160, p_kado_180,
+                                    n_kado_20, n_kado_40, n_kado_60, n_kado_80, n_kado_100, n_kado_120, n_kado_140 , n_kado_160, n_kado_180]
         features_list.append(features_list_for_append)
 
     return features_list 
