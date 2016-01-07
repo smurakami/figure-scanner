@@ -70,60 +70,60 @@ def cal_Features(shape):
 
         ###正角のゾーン!!###
         #20度
-        p_kado_20 = float(len(filter(lambda x: x >=  3.14 * ( float(20 - 20) / 180) and x <=  3.14 * ( float(20) / 180) ,angle))) / float(point_num)
+        p_kado_20 = float(len(filter(lambda x: x >  3.14 * ( float(20 - 20) / 180) and x <=  3.14 * ( float(20) / 180) ,angle))) / float(point_num)
         
         #40度
-        p_kado_40 = float(len(filter(lambda x: x >=  3.14 * ( float(40 - 20) / 180) and x <=  3.14 * ( float(40) / 180) ,angle))) / float(point_num)
+        p_kado_40 = float(len(filter(lambda x: x >  3.14 * ( float(40 - 20) / 180) and x <=  3.14 * ( float(40) / 180) ,angle))) / float(point_num)
 
         #60度
-        p_kado_60 = float(len(filter(lambda x: x >=  3.14 * ( float(60 - 20) / 180) and x <=  3.14 * ( float(60) / 180) ,angle))) / float(point_num)
+        p_kado_60 = float(len(filter(lambda x: x >  3.14 * ( float(60 - 20) / 180) and x <=  3.14 * ( float(60) / 180) ,angle))) / float(point_num)
         
         #80度
-        p_kado_80 = float(len(filter(lambda x: x >=  3.14 * ( float(80 - 20) / 180) and x <=  3.14 * ( float(80) / 180) ,angle))) / float(point_num)
+        p_kado_80 = float(len(filter(lambda x: x >  3.14 * ( float(80 - 20) / 180) and x <=  3.14 * ( float(80) / 180) ,angle))) / float(point_num)
 
         #100度
-        p_kado_100 = float(len(filter(lambda x: x >=  3.14 * (float (100 - 20) / 180) and x <=  3.14 * ( float(100) / 180) ,angle))) / float(point_num)
+        p_kado_100 = float(len(filter(lambda x: x >  3.14 * (float (100 - 20) / 180) and x <=  3.14 * ( float(100) / 180) ,angle))) / float(point_num)
         
         #120度
-        p_kado_120 = float(len(filter(lambda x: x >=  3.14 * ( float(120 - 20) / 180) and x <=  3.14 * ( float(120) / 180) ,angle))) / float(point_num)
+        p_kado_120 = float(len(filter(lambda x: x >  3.14 * ( float(120 - 20) / 180) and x <=  3.14 * ( float(120) / 180) ,angle))) / float(point_num)
 
         #140度
-        p_kado_140 = float(len(filter(lambda x: x >=  3.14 * ( float(140 - 20) / 180) and x <=  3.14 * ( float(140) / 180) ,angle))) / float(point_num)
+        p_kado_140 = float(len(filter(lambda x: x >  3.14 * ( float(140 - 20) / 180) and x <=  3.14 * ( float(140) / 180) ,angle))) / float(point_num)
         
         #160度
-        p_kado_160 = float(len(filter(lambda x: x >=  3.14 * ( float(160 - 20) / 180) and x <=  3.14 * ( float(160) / 180) ,angle))) / float(point_num)
+        p_kado_160 = float(len(filter(lambda x: x >  3.14 * ( float(160 - 20) / 180) and x <=  3.14 * ( float(160) / 180) ,angle))) / float(point_num)
 
         #180度
-        p_kado_180= float(len(filter(lambda x: x >=  3.14 * ( float(180 - 20) / 180) and x <=  3.14 * ( float(180) / 180) ,angle))) / float(point_num)
+        p_kado_180= float(len(filter(lambda x: x >  3.14 * ( float(180 - 20) / 180) and x <=  3.14 * ( float(180) / 180) ,angle))) / float(point_num)
         
 
         ###負角のゾーン!!###
         #20度
-        n_kado_20 = float(len(filter(lambda x: x <=  -3.14 * ( float(20 - 20) / 180) and x >=  -3.14 * ( float(20) / 180) ,angle))) / float(point_num)
+        n_kado_20 = float(len(filter(lambda x: x <=  -3.14 * ( float(20 - 20) / 180) and x >  -3.14 * ( float(20) / 180) ,angle))) / float(point_num)
         
         #40度
-        n_kado_40 = float(len(filter(lambda x: x <=  -3.14 * ( float(40 - 20) / 180) and x >=  -3.14 * ( float(40) / 180) ,angle))) / float(point_num)
+        n_kado_40 = float(len(filter(lambda x: x <=  -3.14 * ( float(40 - 20) / 180) and x >  -3.14 * ( float(40) / 180) ,angle))) / float(point_num)
 
         #60度
-        n_kado_60 = float(len(filter(lambda x: x <=  -3.14 * ( float(60 - 20) / 180) and x >=  -3.14 * ( float(60) / 180) ,angle))) / float(point_num)
+        n_kado_60 = float(len(filter(lambda x: x <=  -3.14 * ( float(60 - 20) / 180) and x >  -3.14 * ( float(60) / 180) ,angle))) / float(point_num)
         
         #80度
-        n_kado_80 = float(len(filter(lambda x: x <=  -3.14 * ( float(80 - 20) / 180) and x >=  -3.14 * ( float(80) / 180) ,angle))) / float(point_num)
+        n_kado_80 = float(len(filter(lambda x: x <=  -3.14 * ( float(80 - 20) / 180) and x >  -3.14 * ( float(80) / 180) ,angle))) / float(point_num)
 
         #100度
-        n_kado_100 = float(len(filter(lambda x: x <=  -3.14 * ( float(100 - 20) / 180) and x >=  -3.14 * ( float(100) / 180) ,angle))) / float(point_num)
+        n_kado_100 = float(len(filter(lambda x: x <=  -3.14 * ( float(100 - 20) / 180) and x >  -3.14 * ( float(100) / 180) ,angle))) / float(point_num)
         
         #120度
-        n_kado_120 = float(len(filter(lambda x: x <=  -3.14 * (float (120 - 20) / 180) and x >=  -3.14 * ( float(120) / 180) ,angle))) / float(point_num)
+        n_kado_120 = float(len(filter(lambda x: x <=  -3.14 * (float (120 - 20) / 180) and x >  -3.14 * ( float(120) / 180) ,angle))) / float(point_num)
 
         #140度
-        n_kado_140 = float(len(filter(lambda x: x <=  -3.14 * ( float(140 - 20) / 180) and x >=  -3.14 * ( float(140) / 180) ,angle))) / float(point_num)
+        n_kado_140 = float(len(filter(lambda x: x <=  -3.14 * ( float(140 - 20) / 180) and x >  -3.14 * ( float(140) / 180) ,angle))) / float(point_num)
         
         #160度
-        n_kado_160 = float(len(filter(lambda x: x <=  -3.14 * ( float(160 - 20) / 180) and x >=  -3.14 * ( float(160) / 180) ,angle))) / float(point_num)
+        n_kado_160 = float(len(filter(lambda x: x <=  -3.14 * ( float(160 - 20) / 180) and x >  -3.14 * ( float(160) / 180) ,angle))) / float(point_num)
 
         #180度
-        n_kado_180= float(len(filter(lambda x: x <=  -3.14 * ( float(180 - 20) / 180) and x >=  -3.14 * ( float(180) / 180) ,angle))) / float(point_num)
+        n_kado_180= float(len(filter(lambda x: x <=  -3.14 * ( float(180 - 20) / 180) and x >  -3.14 * ( float(180) / 180) ,angle))) / float(point_num)
         
 
 
