@@ -7,41 +7,6 @@ import matplotlib
 import os
 
 
-"""
-描画関数
-"""
-
-
-def generateAvarageShapeWithFile(filename):
-    """
-    クラスタリング結果から平均図形作成
-
-    Parameters
-    ----------
-    filename : string
-        クラスタリング結果が格納されているファイルの名前
-    """
-    clusters = json.load(open(filename))
-    clusters = clusters[:8]
-    angle_array_list = [getAngleArrayFromCluster(cluster)
-                        for cluster in clusters]
-    return np.hstack(angle_array_list)
-
-
-def getAngleArrayFromCluster(cluster):
-    angle_array = cluster[0]
-    return angle_array
-
-
-def DTW(vec1, vec2):
-    d = np.zeros([len(vec1)+1, len(vec2)+1])
-    d[:] = np.inf
-    d[0, 0] = 0
-    for i in range(1, d.shape[0]):
-        for j in range(1, d.shape[1]):
-            cost = abs(vec1[i-1]-vec2[j-1])
-            d[i, j] = cost + min(d[i-1, j], d[i, j-1], d[i-1, j-1])
-    return d[-1][-1]
 
 """
 MAIN
@@ -49,30 +14,55 @@ MAIN
 
 
 def main():
-    for json_file in glob.glob("clusters/*.json"):
-        _, filename = os.path.split(json_file)
-        basename, _ = os.path.splitext(filename)
-        en_shape_name, ja_shape_name = basename.split('_')
-        json_file_list = \
-            sum([glob.glob('jsons/%s/*/*.json' % shape_name)
-                 for shape_name in [en_shape_name, ja_shape_name]], [])
+    feature_list = json.load(open('figure_features.json'))
+    filename_list = json.load(open('figure_features_filename.json'))
 
-        avarage_shape = generateAvarageShapeWithFile(json_file)
+    # print feature_list
+    # print filename_list
 
-        data = []
-        for filename in json_file_list:
-            json_data = json.load(open(filename))
-            shape = json_data['angle']
-            print filename
-            data.append([filename, DTW(shape, avarage_shape)])
+    genshou_name_list = [
+        ['clutter', 'gochagocha'],
+        ['murmur', 'sarasara'],
+        ['twinkle', 'kirakira'],
+    ]
 
-        data = sorted(data, lambda x, y: cmp(x[1], y[1]))
-        print data
+    genshou_list = [[] for i in range(len(genshou_name_list))]
 
-        with open("distance/%s.txt" % basename, 'w') as f:
-            for filename, val in data:
-                f.write("%s\t%f\n" % (filename, val))
+    for features, filenames in zip(feature_list, filename_list):
+        filename = filenames[0]
+        for i, genshou_names in enumerate(genshou_name_list):
+            for name in genshou_names:
+                if filename.split('/')[1] == name:
+                    genshou_list[i] += features
+                    break
 
+    genshou_mean = []
+
+    for genshou_feat in genshou_list:
+        genshou_feat = np.array(genshou_feat)
+        genshou_mean.append(genshou_feat.mean(0))
+
+    for features, filenames in zip(feature_list, filename_list):
+        filename = filenames[0]
+        onomatpeia = filename.split('/')[1]
+        print '============='
+        print onomatpeia
+        print '============='
+        for i, genshou_names in enumerate(genshou_name_list):
+            for name in genshou_names:
+                if onomatpeia == name:
+                    genshou_idx = i
+                    break
+
+        features = np.array(features)
+        filenames = np.array(filenames)
+        mean = genshou_mean[genshou_idx]
+        distance = np.linalg.norm(features - mean, axis=1)
+
+        idx = np.argsort(distance)
+
+        for filename, dist in zip(filenames[idx], distance[idx]):
+            print "%s\t%s" % (filename, dist)
 
 if __name__ == "__main__":
     main()
