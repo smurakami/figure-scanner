@@ -12,3 +12,5 @@ avarage_images
 distance
 figure_features.json
 random_walk_images/*.png
+
+*.json
