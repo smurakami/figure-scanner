@@ -61,6 +61,9 @@ def main():
 
         idx = np.argsort(distance)
 
+        print len(filenames)
+        print len(distance)
+
         for filename, dist in zip(filenames[idx], distance[idx]):
             print "%s\t%s" % (filename, dist)
 

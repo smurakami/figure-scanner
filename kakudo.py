@@ -23,13 +23,13 @@ def main():
     dirname_list = []
 
     for dirname in sorted(glob.glob('jsons/*/*')):
-        features = cal_Features(dirname)
-        dirname_list.append(dirname)
+        features, files = cal_Features(dirname)
+        dirname_list.append(files)
         for_save_list.append(features)
 
     with open('figure_features.json','w')as f:
         json.dump(for_save_list, f, sort_keys=True, indent=4)
-    with open('figure_features_dirname.json','w')as f:
+    with open('figure_features_filename.json','w')as f:
         json.dump(dirname_list, f, sort_keys=True, indent=4)
 
 
@@ -128,7 +128,7 @@ def cal_Features(dirname):
                                     n_kado_20, n_kado_40, n_kado_60, n_kado_80, n_kado_100, n_kado_120, n_kado_140 , n_kado_160, n_kado_180]
         features_list.append(features_list_for_append)
 
-    return features_list
+    return features_list, file_list
 
 
 main()
