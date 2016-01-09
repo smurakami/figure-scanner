@@ -13,7 +13,7 @@ import math
 
 #fegure_features.json = [形][ファイルの順番][正角の率,負角の率、外側への丸率、内側への丸率、直線率] の形で格納してます
 def main():
-    shape_list = [
+    onomatpeia_list = [
         'clutter', 'gochagocha',
         'murmur', 'sarasara',
         'twinkle', 'kirakira',
@@ -22,14 +22,18 @@ def main():
     for_save_list = []
     dirname_list = []
 
-    for dirname in sorted(glob.glob('jsons/*/*')):
-        features, files = cal_Features(dirname)
-        dirname_list.append(files)
-        for_save_list.append(features)
+    for onomatpeia in onomatpeia_list:
+        dirname_pattern = 'jsons/%s/*' % onomatpeia
+        print dirname_pattern
+        for dirname in sorted(glob.glob(dirname_pattern)):
+            features, files = cal_Features(dirname)
+            dirname_list.append(files)
+            for_save_list.append(features)
+            print files
 
-    with open('figure_features.json','w')as f:
+    with open('figure_features.json', 'w')as f:
         json.dump(for_save_list, f, sort_keys=True, indent=4)
-    with open('figure_features_filename.json','w')as f:
+    with open('figure_features_filename.json', 'w')as f:
         json.dump(dirname_list, f, sort_keys=True, indent=4)
 
 
