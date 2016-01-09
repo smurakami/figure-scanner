@@ -55,7 +55,7 @@ def cal_Features(dirname):
 
         hist, _ = np.histogram(angle, bins=18, range=(-np.pi, np.pi))
         feature = hist / float(hist.sum())
-        features_list.append(feature.tolist())
+        features_list.append(feature.tolist() + [length])
 
     return features_list, file_list
 
