@@ -27,6 +27,7 @@ def main():
     ]
 
     genshou_list = [[] for i in range(len(genshou_name_list))]
+    genshou_list_filename = [[] for i in range(len(genshou_name_list))]
 
     for features, filenames in zip(feature_list, filename_list):
         filename = filenames[0]
@@ -34,35 +35,29 @@ def main():
             for name in genshou_names:
                 if filename.split('/')[1] == name:
                     genshou_list[i] += features
+                    genshou_list_filename[i] += filenames
                     break
 
-    genshou_mean = []
+    genshou_mean_list = []
 
     for genshou_feat in genshou_list:
         genshou_feat = np.array(genshou_feat)
-        genshou_mean.append(genshou_feat.mean(0))
+        genshou_mean_list.append(genshou_feat.mean(0))
 
-    for features, filenames in zip(feature_list, filename_list):
-        filename = filenames[0]
-        onomatpeia = filename.split('/')[1]
-        print '============='
-        print onomatpeia
-        print '============='
-        for i, genshou_names in enumerate(genshou_name_list):
-            for name in genshou_names:
-                if onomatpeia == name:
-                    genshou_idx = i
-                    break
+    for genshou_name, features, filenames, genshou_mean in \
+        zip(genshou_name_list,
+            genshou_list,
+            genshou_list_filename,
+            genshou_mean_list):
+        print '======================================='
+        print genshou_name
+        print '======================================='
 
         features = np.array(features)
         filenames = np.array(filenames)
-        mean = genshou_mean[genshou_idx]
-        distance = np.linalg.norm(features - mean, axis=1)
+        distance = np.linalg.norm(features - genshou_mean, axis=1)
 
         idx = np.argsort(distance)
-
-        print len(filenames)
-        print len(distance)
 
         for filename, dist in zip(filenames[idx], distance[idx]):
             print "%s\t%s" % (filename, dist)
