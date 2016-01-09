@@ -11,7 +11,6 @@ import sys
 import math
 #import ipdb
 
-#fegure_features.json = [形][ファイルの順番][正角の率,負角の率、外側への丸率、内側への丸率、直線率] の形で格納してます
 def main():
     onomatpeia_list = [
         'clutter', 'gochagocha',
@@ -36,6 +35,12 @@ def main():
         json.dump(dirname_list, f, sort_keys=True, indent=4)
 
 
+def get_feature(angle):
+    hist, _ = np.histogram(angle, bins=18, range=(-np.pi, np.pi))
+    feature = hist / float(hist.sum())
+    return feature
+
+
 def cal_Features(dirname):
     file_list = glob.glob(os.path.join(dirname, '*.json'))
 
@@ -51,13 +56,12 @@ def cal_Features(dirname):
         f = open(file_list[i])
         data = json.load(f)
         angle = data["angle"]
-        length = len(angle)
+        feature = get_feature(angle)
 
-        hist, _ = np.histogram(angle, bins=18, range=(-np.pi, np.pi))
-        feature = hist / float(hist.sum())
-        features_list.append(feature.tolist() + [length])
+    features_list.append(feature.tolist())
 
     return features_list, file_list
 
 
-main()
+if __name__ == '__main__':
+    main()
